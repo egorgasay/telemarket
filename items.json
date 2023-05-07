@@ -1,0 +1,14 @@
+[
+  {
+    "name": "t-shirt black",
+    "description": "100% cotton",
+    "price": 1500.00,
+    "quantity":  1
+  },
+  {
+    "name": "t-shirt white",
+    "description": "100% cotton",
+    "price": 1500.00,
+    "quantity":  1
+  }
+]

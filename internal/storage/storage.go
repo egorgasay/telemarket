@@ -2,7 +2,10 @@ package storage
 
 import (
 	"bot/internal/entity"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"os"
 	"sync"
 )
 
@@ -17,23 +20,51 @@ type Storage struct {
 // ErrItemNotFound error for item not found.
 var ErrItemNotFound = errors.New("item not found")
 
+var defaultItems = map[string]entity.Item{
+	"HATE ⬜️": {
+		Name:        "HATE ⬜",
+		Price:       1500,
+		Quantity:    0,
+		Description: "100% хлопок.",
+	},
+	"HATE ⬛️": {
+		Name:        "HATE ⬛️",
+		Price:       1500,
+		Quantity:    0,
+		Description: "100% хлопок.",
+	},
+}
+
 // New returns new storage
-func New() *Storage {
+func New() (*Storage, error) {
+	f, err := os.Open("items.json")
+	if err != nil {
+		return nil, fmt.Errorf("open file: %w", err)
+	}
+
+	defer f.Close()
+
+	var items = make([]entity.Item, 0)
+
+	err = json.NewDecoder(f).Decode(&items)
+	if err != nil {
+		return nil, fmt.Errorf("read json: %w", err)
+	}
+
+	itemsMap := make(map[string]entity.Item)
+	for _, item := range items {
+		itemsMap[item.Name] = item
+	}
+
 	return &Storage{
-		items: map[string]entity.Item{
-			"HATE ⬜️": {
-				Name:        "HATE ⬜",
-				Price:       1500,
-				Quantity:    0,
-				Description: "100% хлопок.",
-			},
-			"HATE ⬛️": {
-				Name:        "HATE ⬛️",
-				Price:       1500,
-				Quantity:    0,
-				Description: "100% хлопок.",
-			},
-		},
+		items: itemsMap,
+	}, nil
+}
+
+// NewDefault returns new storage with default items
+func NewDefault() *Storage {
+	return &Storage{
+		items: defaultItems,
 	}
 }
 

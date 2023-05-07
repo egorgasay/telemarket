@@ -9,7 +9,11 @@ import (
 )
 
 func TestUseCase_AddRate(t *testing.T) {
-	uc := UseCase{storage: storage.New()}
+	st, err := storage.New()
+	if err != nil {
+		st = &storage.Storage{}
+	}
+	uc := UseCase{storage: st}
 	uc.AddRate(100)
 
 	avg := uc.storage.GetAVG()
@@ -44,7 +48,7 @@ func TestUseCase_GetAll(t *testing.T) {
 	}{
 		{
 			name:   "ok",
-			fields: fields{storage.New()},
+			fields: fields{storage.NewDefault()},
 			want: []string{
 				"HATE ⬜️", "HATE ⬛️",
 			},
@@ -89,7 +93,7 @@ func TestUseCase_GetItemByName(t *testing.T) {
 	}{
 		{
 			name:   "ok",
-			fields: fields{storage: storage.New()},
+			fields: fields{storage: storage.NewDefault()},
 			args: args{
 				name: "HATE ⬜️",
 			},
@@ -102,7 +106,7 @@ func TestUseCase_GetItemByName(t *testing.T) {
 		},
 		{
 			name:   "not found",
-			fields: fields{storage: storage.New()},
+			fields: fields{storage: storage.NewDefault()},
 			args: args{
 				name: "test2",
 			},
@@ -128,7 +132,7 @@ func TestUseCase_GetItemByName(t *testing.T) {
 }
 
 func TestUseCase_GetRate(t *testing.T) {
-	s := storage.New()
+	s := storage.NewDefault()
 	s.AddRate(100)
 	s.AddRate(1)
 	s.AddRate(44)

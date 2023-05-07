@@ -18,7 +18,11 @@ func main() {
 		log.Fatalf("config error: %s", err)
 	}
 
-	store := storage.New()
+	store, err := storage.New()
+	if err != nil {
+		log.Fatalf("storage error: %s", err)
+	}
+
 	logic := usecase.New(store)
 
 	logger, err := zap.NewProduction()
