@@ -1,6 +1,6 @@
-# telemarket - online-store bot
+# telemarket - online-store bot  [![CI](https://github.com/egorgasay/telemarket/actions/workflows/go.yml/badge.svg)](https://github.com/egorgasay/telemarket/actions/workflows/go.yml)
 
-### ⚙️ Installation
+### ⚙️ Installation 
 
 ```bash
 git clone https://github.com/egorgasay/telemarket
