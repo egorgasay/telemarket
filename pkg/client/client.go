@@ -12,11 +12,10 @@ import (
 )
 
 type Client struct {
-	updates       chan Update
-	updatesConfig UpdateConfig
-	done          chan struct{}
-	token         string
-	httpClient    *http.Client
+	updates    chan Update
+	done       chan struct{}
+	token      string
+	httpClient *http.Client
 }
 
 // telegramApiHost is a constant for Telegram API address.
