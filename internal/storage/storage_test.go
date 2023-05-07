@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bot/internal/entity"
+	"bot/pkg"
 	"math"
 	"reflect"
 	"sync"
@@ -126,7 +127,7 @@ func TestStorage_GetAll(t *testing.T) {
 				allRates:   tt.fields.allRates,
 				countRates: tt.fields.countRates,
 			}
-			if got := s.GetAll(); !reflect.DeepEqual(got, tt.want) {
+			if got := s.GetAll(); !pkg.Like(got, tt.want) {
 				t.Errorf("GetAll() = %v, want %v", got, tt.want)
 			}
 		})

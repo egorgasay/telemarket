@@ -3,6 +3,7 @@ package usecase
 import (
 	"bot/internal/entity"
 	"bot/internal/storage"
+	"bot/pkg"
 	"reflect"
 	"testing"
 )
@@ -65,7 +66,7 @@ func TestUseCase_GetAll(t *testing.T) {
 				t.Errorf("GetAll() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
+			if !pkg.Like(got, tt.want) {
 				t.Errorf("GetAll() got = %v, want %v", got, tt.want)
 			}
 		})
