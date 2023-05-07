@@ -1,5 +1,6 @@
 package pkg
 
+// Like returns true if the two slices have the same elements
 func Like(arr []string, arr2 []string) bool {
 	if len(arr) != len(arr2) {
 		return false

@@ -9,6 +9,7 @@ import (
 	tgapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+// Bot represents a bot.
 type Bot struct {
 	token  string
 	logic  *usecase.UseCase

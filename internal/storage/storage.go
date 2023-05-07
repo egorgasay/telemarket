@@ -68,6 +68,7 @@ func NewDefault() *Storage {
 	}
 }
 
+// GetItemByName returns item by name.
 func (s *Storage) GetItemByName(name string) (entity.Item, error) {
 	s.RLock()
 	defer s.RUnlock()
@@ -80,6 +81,7 @@ func (s *Storage) GetItemByName(name string) (entity.Item, error) {
 	return item, nil
 }
 
+// GetAll returns the names of all items from the repository.
 func (s *Storage) GetAll() []string {
 	s.RLock()
 	defer s.RUnlock()
@@ -91,6 +93,7 @@ func (s *Storage) GetAll() []string {
 	return items
 }
 
+// GetAVG returns the average rating of the store.
 func (s *Storage) GetAVG() float64 {
 	s.RLock()
 	defer s.RUnlock()
@@ -98,6 +101,7 @@ func (s *Storage) GetAVG() float64 {
 	return float64(s.allRates) / float64(s.countRates)
 }
 
+// AddRate adds rate to the store.
 func (s *Storage) AddRate(rate int) {
 	s.Lock()
 	defer s.Unlock()
