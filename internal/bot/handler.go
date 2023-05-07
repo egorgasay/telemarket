@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// handleMessage handles commands.
 func (b *Bot) handleCommand(msg *tgapi.Message) {
 	switch msg.Command() {
 	case "start":
@@ -17,10 +18,12 @@ func (b *Bot) handleCommand(msg *tgapi.Message) {
 	}
 }
 
+// handleMessage handles messages.
 func (b *Bot) handleMessage() {
 
 }
 
+// handleStart handles start command.
 func (b *Bot) handleStart(msg *tgapi.Message) {
 	msgConfig := tgapi.NewMessage(msg.Chat.ID, startMessage)
 
@@ -31,6 +34,7 @@ func (b *Bot) handleStart(msg *tgapi.Message) {
 	}
 }
 
+// handleMessage handle callbacks from user.
 func (b *Bot) handleCallbackQuery(query *tgapi.CallbackQuery) {
 	markup := tgapi.NewInlineKeyboardMarkup()
 	split := strings.Split(query.Data, "::")

@@ -1,6 +1,6 @@
 package entity
 
-// Item represents an item in the shop
+// Item represents an item in the shop.
 type Item struct {
 	Name        string
 	Description string
@@ -9,6 +9,7 @@ type Item struct {
 	Quantity    int
 }
 
+// Information represents the information about the shop.
 type Information struct {
 	Avg float64
 }

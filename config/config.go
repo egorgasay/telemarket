@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"flag"
+	"os"
 )
 
 // Flag struct for parsing from env and cmd args.
@@ -29,6 +30,10 @@ type Config struct {
 // New initializing the config for the application.
 func New() (*Config, error) {
 	flag.Parse()
+
+	if key, ok := os.LookupEnv("TELEGRAM_BOT_KEY"); ok {
+		*f.Key = key
+	}
 
 	if *f.Key == "" {
 		return nil, ErrKeyNotSet

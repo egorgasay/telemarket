@@ -5,6 +5,7 @@ import (
 	"text/template"
 )
 
+// Group of constants for bot messages
 const (
 	startMessage           = "👋 Привет, меня зовут Космос! \n Я бот, который поможет тебе купить футболку:)"
 	feedbackMessage        = "Оцени магазин и качество вещей по пятибалльной шкале:"
@@ -18,11 +19,7 @@ const (
 	itemMessage            = "{{ .Name }} \n{{ .Price }}р.\n{{ .Description }}"
 )
 
-type keyboardAndMessage struct {
-	keyboard tgapi.InlineKeyboardMarkup
-	message  string
-}
-
+// Group of constants for handling messages from user.
 const (
 	height        = "Рост"
 	start         = "start"
@@ -38,8 +35,10 @@ const (
 	rate          = "rate"
 )
 
+// itemButtons array of items. Automatically fulfilled from storage when bot starts.
 var itemButtons = make([][]tgapi.InlineKeyboardButton, 0)
 
+// Group of variables that are keyboard buttons.
 var (
 	startKeyboard = tgapi.NewInlineKeyboardMarkup(
 		tgapi.NewInlineKeyboardRow(
@@ -133,6 +132,7 @@ var (
 	)
 )
 
+// Group of templates for messages.
 var (
 	itemTemplate = template.Must(template.New("items").Parse(itemMessage))
 	infoTemplate = template.Must(template.New("info").Parse(infoMessage))

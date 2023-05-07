@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// Storage for items.
 type Storage struct {
 	sync.RWMutex
 	items      map[string]entity.Item
@@ -13,8 +14,10 @@ type Storage struct {
 	countRates int
 }
 
+// ErrItemNotFound error for item not found.
 var ErrItemNotFound = errors.New("item not found")
 
+// New returns new storage
 func New() *Storage {
 	return &Storage{
 		items: map[string]entity.Item{
