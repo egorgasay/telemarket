@@ -14,10 +14,10 @@ With this bot, you can easily sell clothes via Telegram.
 
 ### 👕 Change items list
 
-You can start selling your own products by changing the default values in the config.json file.
+You can start selling your own products by changing the default values in the items.json file.
 
 ```json
-config.json
+items.json
 [
     {
         "name": "t-shirt black",
