@@ -4,6 +4,7 @@ import (
 	"bot/internal/entity"
 	"bot/internal/storage"
 	"errors"
+	"math"
 )
 
 type UseCase struct {
@@ -28,4 +29,16 @@ func (u *UseCase) GetAll() ([]string, error) {
 		return nil, ErrEmpty
 	}
 	return items, nil
+}
+
+func (u *UseCase) AddRate(rate int) {
+	u.storage.AddRate(rate)
+}
+
+func (u *UseCase) GetRate() float64 {
+	avg := math.Ceil(u.storage.GetAVG()*100) / 100
+	if math.IsNaN(avg) {
+		return 0
+	}
+	return avg
 }

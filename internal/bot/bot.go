@@ -3,23 +3,25 @@ package bot
 import (
 	"bot/internal/usecase"
 	"fmt"
-	"github.com/egorgasay/gotils"
+	"go.uber.org/zap"
+
+	// telegram SDK
 	tgapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 type Bot struct {
-	token string
-	logic *usecase.UseCase
+	token  string
+	logic  *usecase.UseCase
+	logger *zap.Logger
+
 	*tgapi.BotAPI
 }
 
-func New(token string, logic *usecase.UseCase) (*Bot, error) {
+func New(token string, logic *usecase.UseCase, logger *zap.Logger) (*Bot, error) {
 	bot, err := tgapi.NewBotAPI(token)
 	if err != nil {
 		return nil, fmt.Errorf("error creating bot: %w", err)
 	}
-
-	bot.Debug = true // TODO: remove
 
 	allItems, err := logic.GetAll()
 	if err != nil {
@@ -31,12 +33,20 @@ func New(token string, logic *usecase.UseCase) (*Bot, error) {
 			tgapi.NewInlineKeyboardButtonData(item, "item::"+item),
 		))
 	}
-	gotils.Reverse(itemButtons)
+
+	itemButtons = append(itemButtons,
+		tgapi.NewInlineKeyboardRow(
+			tgapi.NewInlineKeyboardButtonData("Назад", start),
+		),
+	)
+
+	itemsKeyboard = tgapi.NewInlineKeyboardMarkup(itemButtons...)
+
 	return &Bot{
 		token:  token,
 		logic:  logic,
 		BotAPI: bot,
-		// TODO: add logger
+		logger: logger,
 	}, nil
 }
 

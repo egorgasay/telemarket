@@ -5,6 +5,7 @@ import (
 	"bot/internal/bot"
 	"bot/internal/storage"
 	"bot/internal/usecase"
+	"go.uber.org/zap"
 	"log"
 	"os"
 	"os/signal"
@@ -20,7 +21,12 @@ func main() {
 	store := storage.New()
 	logic := usecase.New(store)
 
-	b, err := bot.New(cfg.Key, logic)
+	logger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatalf("zap error: %s", err)
+	}
+
+	b, err := bot.New(cfg.Key, logic, logger)
 	if err != nil {
 		log.Fatalf("bot error: %s", err)
 	}
