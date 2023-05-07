@@ -2,30 +2,28 @@ package bot
 
 import (
 	"bot/internal/entity"
+	"bot/pkg/client"
 	"bytes"
 	"fmt"
-	tgapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"strconv"
 	"strings"
 )
 
 // handleMessage handles commands.
-func (b *Bot) handleCommand(msg *tgapi.Message) {
-	switch msg.Command() {
-	case "start":
+func (b *Bot) handleCommand(msg *client.Message) {
+	switch msg.Text {
+	case "/start":
 		b.handleStart(msg)
 	}
 }
 
 // handleMessage handles messages.
-func (b *Bot) handleMessage() {
-
-}
+func (b *Bot) handleMessage() {}
 
 // handleStart handles start command.
-func (b *Bot) handleStart(msg *tgapi.Message) {
-	msgConfig := tgapi.NewMessage(msg.Chat.ID, startMessage)
+func (b *Bot) handleStart(msg *client.Message) {
+	msgConfig := client.NewMessage(int64(msg.Chat.ID), startMessage)
 
 	msgConfig.ReplyMarkup = startKeyboard
 	_, err := b.Send(msgConfig)
@@ -35,8 +33,8 @@ func (b *Bot) handleStart(msg *tgapi.Message) {
 }
 
 // handleMessage handle callbacks from user.
-func (b *Bot) handleCallbackQuery(query *tgapi.CallbackQuery) {
-	markup := tgapi.NewInlineKeyboardMarkup()
+func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
+	markup := client.NewKeyboardWithMarkup()
 	split := strings.Split(query.Data, "::")
 	if len(split) == 0 {
 		return
@@ -135,7 +133,7 @@ func (b *Bot) handleCallbackQuery(query *tgapi.CallbackQuery) {
 		text = buf.String()
 	}
 
-	msg := tgapi.NewEditMessageTextAndMarkup(query.Message.Chat.ID, query.Message.MessageID, text, markup)
+	msg := client.NewEditMessageTextAndMarkup(query.Message.Chat.ID, query.Message.MessageID, text, markup)
 	if _, err := b.Send(msg); err != nil {
 		b.logger.Warn(fmt.Sprintf("send error: %v", err.Error()))
 	}

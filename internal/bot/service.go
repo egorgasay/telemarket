@@ -1,7 +1,7 @@
 package bot
 
 import (
-	tgapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"bot/pkg/client"
 	"text/template"
 )
 
@@ -36,98 +36,98 @@ const (
 )
 
 // itemButtons array of items. Automatically fulfilled from storage when bot starts.
-var itemButtons = make([][]tgapi.InlineKeyboardButton, 0)
+var itemButtons = make([][]client.KeyboardButton, 0)
 
 // Group of variables that are keyboard buttons.
 var (
-	startKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Купить 🛒", items),
-			tgapi.NewInlineKeyboardButtonData("Адрес 📍", address),
-			tgapi.NewInlineKeyboardButtonData("Отзыв ⭐️", feedBack),
-			tgapi.NewInlineKeyboardButtonURL("VK 💙", "https://vk.com/ledda.store"),
+	startKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Купить 🛒", items),
+			client.NewKeyboardButtonWithData("Адрес 📍", address),
+			client.NewKeyboardButtonWithData("Отзыв ⭐️", feedBack),
+			client.NewKeyboardButtonURL("VK 💙", "https://vk.com/ledda.store"),
 		),
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Узнать размер ❔", height),
-			tgapi.NewInlineKeyboardButtonData("О магазине ℹ️", info),
-		),
-	)
-
-	addressKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", start),
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Узнать размер ❔", height),
+			client.NewKeyboardButtonWithData("О магазине ℹ️", info),
 		),
 	)
 
-	itemsKeyboard = tgapi.NewInlineKeyboardMarkup()
-
-	feedBackKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("1", "rate::1"),
-			tgapi.NewInlineKeyboardButtonData("2", "rate::2"),
-			tgapi.NewInlineKeyboardButtonData("3", "rate::3"),
-			tgapi.NewInlineKeyboardButtonData("4", "rate::4"),
-			tgapi.NewInlineKeyboardButtonData("5", "rate::5"),
-		),
-
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", start),
+	addressKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", start),
 		),
 	)
 
-	thxFeedbackKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("На главную", start),
+	itemsKeyboard = client.NewKeyboardWithMarkup()
+
+	feedBackKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("1", "rate::1"),
+			client.NewKeyboardButtonWithData("2", "rate::2"),
+			client.NewKeyboardButtonWithData("3", "rate::3"),
+			client.NewKeyboardButtonWithData("4", "rate::4"),
+			client.NewKeyboardButtonWithData("5", "rate::5"),
+		),
+
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", start),
 		),
 	)
 
-	sorryFeedbackKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Изменить отзыв", feedBack),
-		),
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("На главную", start),
+	thxFeedbackKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("На главную", start),
 		),
 	)
 
-	heightKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData(" - 158", sorryHeight),
-			tgapi.NewInlineKeyboardButtonData("159 - 170", size+"::S"),
-			tgapi.NewInlineKeyboardButtonData("171 - 180", size+"::M"),
-			tgapi.NewInlineKeyboardButtonData("181 - 188", size+"::L"),
-			tgapi.NewInlineKeyboardButtonData("189 - ", sorryHeight),
+	sorryFeedbackKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Изменить отзыв", feedBack),
 		),
-
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", start),
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("На главную", start),
 		),
 	)
 
-	soldKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Нет в наличии 💔", items),
+	heightKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData(" - 158", sorryHeight),
+			client.NewKeyboardButtonWithData("159 - 170", size+"::S"),
+			client.NewKeyboardButtonWithData("171 - 180", size+"::M"),
+			client.NewKeyboardButtonWithData("181 - 188", size+"::L"),
+			client.NewKeyboardButtonWithData("189 - ", sorryHeight),
 		),
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", items),
+
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", start),
 		),
 	)
 
-	buyKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Купить 🛒", items),
+	soldKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Нет в наличии 💔", items),
 		),
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", start),
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", items),
 		),
 	)
 
-	infoKeyboard = tgapi.NewInlineKeyboardMarkup(
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Оставить отзыв 💫", feedBack),
+	buyKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Купить 🛒", items),
 		),
-		tgapi.NewInlineKeyboardRow(
-			tgapi.NewInlineKeyboardButtonData("Назад", start),
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", start),
+		),
+	)
+
+	infoKeyboard = client.NewKeyboardWithMarkup(
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Оставить отзыв 💫", feedBack),
+		),
+		client.NewKeyboardRow(
+			client.NewKeyboardButtonWithData("Назад", start),
 		),
 	)
 )

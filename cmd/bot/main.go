@@ -36,6 +36,7 @@ func main() {
 	}
 
 	go func() {
+		log.Println("Starting Bot ...")
 		err := b.Start()
 		if err != nil {
 			log.Fatalf("bot error: %s", err)
@@ -47,7 +48,7 @@ func main() {
 
 	<-quit
 
-	log.Println("Shutdown Server ...")
+	log.Println("Shutdown Bot ...")
 
 	b.Stop()
 }
