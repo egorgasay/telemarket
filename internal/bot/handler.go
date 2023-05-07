@@ -89,7 +89,7 @@ func (b *Bot) handleCallbackQuery(query *tgapi.CallbackQuery) {
 		if len(split) != 2 {
 			markup = heightKeyboard
 			text = sorryHeightMessage
-			return
+			break
 		}
 		markup = thxFeedbackKeyboard
 		text = "Ваш размер: " + split[1]
