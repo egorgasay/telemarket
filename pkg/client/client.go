@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// Client is a struct for working with Telegram API.
 type Client struct {
 	updates    chan Update
 	done       chan struct{}
@@ -18,9 +19,9 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// telegramApiHost is a constant for Telegram API address.
+// telegramAPIHost is a constant for Telegram API address.
 const (
-	telegramApiHost = "api.telegram.org"
+	telegramAPIHost = "api.telegram.org"
 )
 
 // New is a constructor for Client.
@@ -101,7 +102,7 @@ func (c *Client) getBatchUpdates(updateConf UpdateConfig) ([]Update, error) {
 
 // doRequest is a method for sending request to Telegram API.
 func (c *Client) doRequest(endpoint string, body io.Reader) (*Response, error) {
-	requestPath := path.Join(telegramApiHost, c.token, endpoint)
+	requestPath := path.Join(telegramAPIHost, c.token, endpoint)
 
 	r, err := http.NewRequest("POST", "https://"+requestPath, body)
 	if err != nil {
