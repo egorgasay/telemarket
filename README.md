@@ -5,6 +5,7 @@
 ```bash
 git clone https://github.com/egorgasay/telemarket
 cd telemarket
+export TELEGRAM_BOT_KEY=YOUR_BOT_KEY
 make run
 ```
 
