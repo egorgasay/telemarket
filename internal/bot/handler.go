@@ -40,6 +40,8 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 		return
 	}
 
+	in := client.NewInputMediaPhoto(client.FileID("ledda.img"))
+
 	defer b.logger.Sync()
 
 	text := split[0]
@@ -131,6 +133,11 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 		}
 
 		text = buf.String()
+	}
+
+	msg := client.NewEdi(query.Message.Chat.ID, query.Message.MessageID, text, markup)
+	if _, err := b.Send(msg); err != nil {
+		b.logger.Warn(fmt.Sprintf("send error: %v", err.Error()))
 	}
 
 	msg := client.NewEditMessageTextAndMarkup(query.Message.Chat.ID, query.Message.MessageID, text, markup)
