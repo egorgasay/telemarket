@@ -3,6 +3,8 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"strconv"
 )
 
 // Chat describes the chat with user.
@@ -117,6 +119,30 @@ type BaseEdit struct {
 	ReplyMarkup     *InlineKeyboardMarkup
 }
 
+func (edit BaseEdit) params() (map[string]string, error) {
+	params := make(map[string]string)
+
+	if edit.InlineMessageID != "" {
+		params["inline_message_id"] = edit.InlineMessageID
+	} else {
+		if edit.ChatID != 0 {
+			params["chat_id"] = strconv.FormatInt(edit.ChatID, 10)
+		}
+		if edit.MessageID != 0 {
+			params["message_id"] = strconv.Itoa(edit.MessageID)
+		}
+	}
+
+	b, err := json.Marshal(edit.ReplyMarkup)
+	if err != nil {
+		return nil, err
+	}
+
+	params["reply_markup"] = string(b)
+
+	return params, err
+}
+
 // MessageEntity represents one special entity in a text message.
 type MessageEntity struct {
 	Type     string `json:"type"`
@@ -162,4 +188,31 @@ type BaseChat struct {
 	ReplyMarkup              interface{}
 	DisableNotification      bool
 	AllowSendingWithoutReply bool
+}
+
+// values returns url.Values representation of BaseChat
+func (chat *BaseChat) values() (url.Values, error) {
+	v := url.Values{}
+	if chat.ChannelUsername != "" {
+		v.Add("chat_id", chat.ChannelUsername)
+	} else {
+		v.Add("chat_id", strconv.FormatInt(chat.ChatID, 10))
+	}
+
+	if chat.ReplyToMessageID != 0 {
+		v.Add("reply_to_message_id", strconv.Itoa(chat.ReplyToMessageID))
+	}
+
+	if chat.ReplyMarkup != nil {
+		data, err := json.Marshal(chat.ReplyMarkup)
+		if err != nil {
+			return v, err
+		}
+
+		v.Add("reply_markup", string(data))
+	}
+
+	v.Add("disable_notification", strconv.FormatBool(chat.DisableNotification))
+
+	return v, nil
 }

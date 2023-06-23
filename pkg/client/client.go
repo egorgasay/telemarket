@@ -173,29 +173,6 @@ func NewMessage(chatID int64, text string) MessageConfig {
 	}
 }
 
-// BaseInputMedia is a base type for the InputMedia types.
-type BaseInputMedia struct {
-	Type            string          `json:"type"`
-	Media           RequestFileData `json:"media"`
-	Caption         string          `json:"caption,omitempty"`
-	ParseMode       string          `json:"parse_mode,omitempty"`
-	CaptionEntities []MessageEntity `json:"caption_entities,omitempty"`
-}
-
-func NewInputMediaPhoto(media RequestFileData) InputMediaPhoto {
-	return InputMediaPhoto{
-		BaseInputMedia{
-			Type:  "photo",
-			Media: media,
-		},
-	}
-}
-
-// InputMediaPhoto is a photo to send as part of a media group.
-type InputMediaPhoto struct {
-	BaseInputMedia
-}
-
 // jsonAnything is a method for converting interface to JSON string.
 func jsonAnything(i interface{}) string {
 	b, err := json.Marshal(i)
