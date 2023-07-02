@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("config error: %s", err)
 	}
 
-	store, err := storage.New()
+	store, err := storage.New(cfg.PathToItems)
 	if err != nil {
 		log.Fatalf("storage error: %s", err)
 	}
