@@ -6,7 +6,7 @@ build:
 	go build -o ${BINARY_NAME} cmd/bot/main.go
 
 test:
-	go test -v cmd/bot/main.go
+	go test -v .
 
 run:
 	go build -o ${BINARY_NAME} cmd/bot/main.go

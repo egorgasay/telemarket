@@ -2,16 +2,16 @@ package bot
 
 import (
 	"bot/internal/entity"
-	"bot/pkg/client"
 	"bytes"
 	"fmt"
+	api "gopkg.in/telegram-bot-api.v4"
 	"log"
 	"strconv"
 	"strings"
 )
 
 // handleMessage handles commands.
-func (b *Bot) handleCommand(msg *client.Message) {
+func (b *Bot) handleCommand(msg *api.Message) {
 	switch msg.Text {
 	case "/start":
 		b.handleStart(msg)
@@ -22,10 +22,12 @@ func (b *Bot) handleCommand(msg *client.Message) {
 func (b *Bot) handleMessage() {}
 
 // handleStart handles start command.
-func (b *Bot) handleStart(msg *client.Message) {
-	msgConfig := client.NewMessage(int64(msg.Chat.ID), startMessage)
+func (b *Bot) handleStart(msg *api.Message) {
+	msgConfig := api.NewPhotoUpload(msg.Chat.ID, startImage)
 
 	msgConfig.ReplyMarkup = startKeyboard
+	msgConfig.Caption = startMessage
+
 	_, err := b.Send(msgConfig)
 	if err != nil {
 		log.Println("send error: ", err)
@@ -33,8 +35,8 @@ func (b *Bot) handleStart(msg *client.Message) {
 }
 
 // handleMessage handle callbacks from user.
-func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
-	markup := client.NewKeyboardWithMarkup()
+func (b *Bot) handleCallbackQuery(query *api.CallbackQuery) {
+	markup := api.NewInlineKeyboardMarkup()
 	split := strings.Split(query.Data, "::")
 	if len(split) == 0 {
 		return
@@ -43,9 +45,11 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 	defer b.logger.Sync()
 
 	text := split[0]
+	pathToFile := ""
 
 	switch text {
 	case items:
+		pathToFile = allItemsImage
 		text = itemsMessage
 		markup = itemsKeyboard
 	case height:
@@ -57,6 +61,7 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 	case start:
 		markup = startKeyboard
 		text = startMessage
+		pathToFile = startImage
 	case rate:
 		if len(split) != 2 {
 			return
@@ -122,6 +127,8 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 			markup = buyKeyboard
 		}
 
+		pathToFile = item.PathToPhoto
+
 		var bytesArray []byte
 		buf := bytes.NewBuffer(bytesArray)
 		err = itemTemplate.Execute(buf, item)
@@ -133,7 +140,19 @@ func (b *Bot) handleCallbackQuery(query *client.CallbackQuery) {
 		text = buf.String()
 	}
 
-	msg := client.NewEditMessageTextAndMarkup(query.Message.Chat.ID, query.Message.MessageID, text, markup)
+	var msg api.Chattable
+
+	if pathToFile != "" {
+		msgWithPhoto := api.NewPhotoUpload(query.Message.Chat.ID, pathToFile)
+		msgWithPhoto.Caption = text
+		msgWithPhoto.ReplyMarkup = markup
+		msg = msgWithPhoto
+	} else {
+		msgText := api.NewMessage(query.Message.Chat.ID, text)
+		msgText.ReplyMarkup = markup
+		msg = msgText
+	}
+
 	if _, err := b.Send(msg); err != nil {
 		b.logger.Warn(fmt.Sprintf("send error: %v", err.Error()))
 	}

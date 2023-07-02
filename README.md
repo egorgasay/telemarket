@@ -13,6 +13,19 @@ make run
 
 With this bot, you can easily sell clothes via Telegram.  
 
+### 🏆 Challenges:
+1. CI ✅
+2. Deploy ✅
+3. Messages with photos ✅
+4. Personal Data Storage Agreement
+5. Administrator Mode (Add, Remove, Change)
+6. Analytics Mode (Watch stats)
+7. Uploading statistics to Excel
+8. Order tracking
+9. Discount system (as module)
+10. Bonus system (as module)
+11. Mystery Box system (as module)
+
 ### 👕 Change items list
 
 You can start selling your own products by changing the default values in the items.json file.

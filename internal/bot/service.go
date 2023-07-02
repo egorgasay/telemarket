@@ -1,7 +1,7 @@
 package bot
 
 import (
-	"bot/pkg/client"
+	api "gopkg.in/telegram-bot-api.v4"
 	"text/template"
 )
 
@@ -36,98 +36,113 @@ const (
 )
 
 // itemButtons array of items. Automatically fulfilled from storage when bot starts.
-var itemButtons = make([][]client.KeyboardButton, 0)
+var itemButtons = make([][]api.InlineKeyboardButton, 0)
+
+var (
+	allItemsImage = "src/images/allItems.png"
+	startImage    = "src/images/ledda.png"
+)
 
 // Group of variables that are keyboard buttons.
 var (
-	startKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Купить 🛒", items),
-			client.NewKeyboardButtonWithData("Адрес 📍", address),
-			client.NewKeyboardButtonWithData("Отзыв ⭐️", feedBack),
-			client.NewKeyboardButtonURL("VK 💙", "https://vk.com/ledda.store"),
+	startKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Купить 🛒", items),
+			api.NewInlineKeyboardButtonData("Адрес 📍", address),
 		),
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Узнать размер ❔", height),
-			client.NewKeyboardButtonWithData("О магазине ℹ️", info),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Отзыв ⭐️", feedBack),
+			api.NewInlineKeyboardButtonURL("VK 💙", "https://vk.com/ledda.store"),
 		),
-	)
-
-	addressKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", start),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Узнать размер ❔", height),
+			api.NewInlineKeyboardButtonData("О магазине ℹ️", info),
 		),
 	)
 
-	itemsKeyboard = client.NewKeyboardWithMarkup()
-
-	feedBackKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("1", "rate::1"),
-			client.NewKeyboardButtonWithData("2", "rate::2"),
-			client.NewKeyboardButtonWithData("3", "rate::3"),
-			client.NewKeyboardButtonWithData("4", "rate::4"),
-			client.NewKeyboardButtonWithData("5", "rate::5"),
-		),
-
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", start),
+	addressKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", start),
 		),
 	)
 
-	thxFeedbackKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("На главную", start),
+	itemsKeyboard = api.NewInlineKeyboardMarkup()
+
+	feedBackKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("1", "rate::1"),
+			api.NewInlineKeyboardButtonData("2", "rate::2"),
+			api.NewInlineKeyboardButtonData("3", "rate::3"),
+			api.NewInlineKeyboardButtonData("4", "rate::4"),
+			api.NewInlineKeyboardButtonData("5", "rate::5"),
+		),
+
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", start),
 		),
 	)
 
-	sorryFeedbackKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Изменить отзыв", feedBack),
-		),
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("На главную", start),
+	thxFeedbackKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("На главную", start),
 		),
 	)
 
-	heightKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData(" - 158", sorryHeight),
-			client.NewKeyboardButtonWithData("159 - 170", size+"::S"),
-			client.NewKeyboardButtonWithData("171 - 180", size+"::M"),
-			client.NewKeyboardButtonWithData("181 - 188", size+"::L"),
-			client.NewKeyboardButtonWithData("189 - ", sorryHeight),
+	sorryFeedbackKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Изменить отзыв", feedBack),
 		),
-
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", start),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("На главную", start),
 		),
 	)
 
-	soldKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Нет в наличии 💔", items),
+	heightKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData(" - 158", sorryHeight),
+			api.NewInlineKeyboardButtonData("159 - 170", size+"::S"),
+			api.NewInlineKeyboardButtonData("171 - 180", size+"::M"),
+			api.NewInlineKeyboardButtonData("181 - 188", size+"::L"),
+			api.NewInlineKeyboardButtonData("189 - ", sorryHeight),
 		),
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", items),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData(" - 158", sorryHeight),
+		), api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("159 - 170", size+"::S"),
+		), api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("171 - 180", size+"::M"),
+		), api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("189 - ", sorryHeight),
+		),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", start),
 		),
 	)
 
-	buyKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Купить 🛒", items),
+	soldKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Нет в наличии 💔", items),
 		),
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", start),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", items),
 		),
 	)
 
-	infoKeyboard = client.NewKeyboardWithMarkup(
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Оставить отзыв 💫", feedBack),
+	buyKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Купить 🛒", items),
 		),
-		client.NewKeyboardRow(
-			client.NewKeyboardButtonWithData("Назад", start),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", start),
+		),
+	)
+
+	infoKeyboard = api.NewInlineKeyboardMarkup(
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Оставить отзыв 💫", feedBack),
+		),
+		api.NewInlineKeyboardRow(
+			api.NewInlineKeyboardButtonData("Назад", start),
 		),
 	)
 )

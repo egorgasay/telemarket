@@ -36,8 +36,8 @@ var defaultItems = map[string]entity.Item{
 }
 
 // New returns new storage
-func New() (*Storage, error) {
-	f, err := os.Open("items.json")
+func New(path string) (*Storage, error) {
+	f, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("open file: %w", err)
 	}

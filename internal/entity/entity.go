@@ -7,6 +7,7 @@ type Item struct {
 	Image       string
 	Price       float32
 	Quantity    int
+	PathToPhoto string `json:"path_to_photo"`
 }
 
 // Information represents the information about the shop.

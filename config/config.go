@@ -8,7 +8,8 @@ import (
 
 // Flag struct for parsing from env and cmd args.
 type Flag struct {
-	Key *string
+	Key         *string
+	PathToItems *string
 }
 
 var (
@@ -20,11 +21,13 @@ var (
 
 func init() {
 	f.Key = flag.String("key", "", "-key=KEY")
+	f.PathToItems = flag.String("items", "items.json", "-config=path/to/items.json")
 }
 
 // Config contains all the settings for configuring the application.
 type Config struct {
-	Key string
+	Key         string
+	PathToItems string
 }
 
 // New initializing the config for the application.
@@ -40,6 +43,7 @@ func New() (*Config, error) {
 	}
 
 	return &Config{
-		Key: *f.Key,
+		Key:         *f.Key,
+		PathToItems: *f.PathToItems,
 	}, nil
 }
