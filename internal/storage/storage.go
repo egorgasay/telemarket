@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bot/internal/entity"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,7 +13,7 @@ import (
 // Storage for items.
 type Storage struct {
 	sync.RWMutex
-	items      map[string]entity.Item
+	items      []entity.IItem
 	allRates   int
 	countRates int
 }
@@ -20,17 +21,19 @@ type Storage struct {
 // ErrItemNotFound error for item not found.
 var ErrItemNotFound = errors.New("item not found")
 
-var defaultItems = map[string]entity.Item{
-	"HATE ⬜️": {
+var defaultItems = []entity.IItem{
+	entity.Item{
+		ID:          "1",
 		Name:        "HATE ⬜",
-		Price:       1500,
-		Quantity:    0,
+		Price:       "1500",
+		Quantity:    "0",
 		Description: "100% хлопок.",
 	},
-	"HATE ⬛️": {
+	entity.Item{
+		ID:          "2",
 		Name:        "HATE ⬛️",
-		Price:       1500,
-		Quantity:    0,
+		Price:       "1500",
+		Quantity:    "0",
 		Description: "100% хлопок.",
 	},
 }
@@ -51,13 +54,13 @@ func New(path string) (*Storage, error) {
 		return nil, fmt.Errorf("read json: %w", err)
 	}
 
-	itemsMap := make(map[string]entity.Item)
+	iitems := make([]entity.IItem, len(items))
 	for _, item := range items {
-		itemsMap[item.Name] = item
+		iitems = append(iitems, item)
 	}
 
 	return &Storage{
-		items: itemsMap,
+		items: iitems,
 	}, nil
 }
 
@@ -69,16 +72,17 @@ func NewDefault() *Storage {
 }
 
 // GetItemByName returns item by name.
-func (s *Storage) GetItemByName(name string) (entity.Item, error) {
+func (s *Storage) GetItemByName(name string) (i entity.IItem, err error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	item, ok := s.items[name]
-	if !ok {
-		return entity.Item{}, ErrItemNotFound
+	for _, item := range s.items {
+		if item.GetName() == name {
+			return item, nil
+		}
 	}
 
-	return item, nil
+	return i, ErrItemNotFound
 }
 
 // GetAll returns the names of all items from the repository.
@@ -87,8 +91,8 @@ func (s *Storage) GetAll() []string {
 	defer s.RUnlock()
 
 	var items []string
-	for key := range s.items {
-		items = append(items, key)
+	for _, item := range s.items {
+		items = append(items, item.GetName())
 	}
 	return items
 }
@@ -108,4 +112,24 @@ func (s *Storage) AddRate(rate int) {
 
 	s.allRates += rate
 	s.countRates++
+}
+
+func (s *Storage) UpsertItem(ctx context.Context, item entity.IItem) error {
+	s.Lock()
+	defer s.Unlock()
+
+	if ctx.Err() != nil {
+		return ctx.Err()
+	}
+
+	for indx, i := range s.items {
+		if i.GetName() == item.GetName() {
+			s.items[indx] = item
+			return nil
+		}
+	}
+
+	s.items = append(s.items, item)
+
+	return nil
 }
