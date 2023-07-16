@@ -17,9 +17,31 @@ type Bot struct {
 
 // New creates a new bot.
 func New(token string, logic *usecase.UseCase, logger *zap.Logger) (*Bot, error) {
-	allItems, err := logic.GetAll()
+
+	b, err := api.NewBotAPI(token)
 	if err != nil {
-		return nil, fmt.Errorf("error getting items: %w", err)
+		return nil, fmt.Errorf("error creating bot api: %w", err)
+	}
+
+	bot := &Bot{
+		token:  token,
+		logic:  logic,
+		BotAPI: b,
+		logger: logger,
+	}
+
+	err = bot.formItems()
+	if err != nil {
+		return nil, fmt.Errorf("error while form items: %w", err)
+	}
+
+	return bot, nil
+}
+
+func (b *Bot) formItems() error {
+	allItems, err := b.logic.GetAll()
+	if err != nil {
+		return fmt.Errorf("error getting items: %w", err)
 	}
 
 	for _, item := range allItems {
@@ -28,6 +50,7 @@ func New(token string, logic *usecase.UseCase, logger *zap.Logger) (*Bot, error)
 		))
 	}
 
+	itemButtons = itemButtons[:0]
 	itemButtons = append(itemButtons,
 		api.NewInlineKeyboardRow(
 			api.NewInlineKeyboardButtonData("Назад", start),
@@ -36,17 +59,7 @@ func New(token string, logic *usecase.UseCase, logger *zap.Logger) (*Bot, error)
 
 	itemsKeyboard = api.NewInlineKeyboardMarkup(itemButtons...)
 
-	b, err := api.NewBotAPI(token)
-	if err != nil {
-		panic(err) // TODO: REMOVE THIS
-	}
-
-	return &Bot{
-		token:  token,
-		logic:  logic,
-		BotAPI: b,
-		logger: logger,
-	}, nil
+	return nil
 }
 
 // Start starts the bot.

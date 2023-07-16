@@ -49,6 +49,10 @@ func (b *Bot) handleCallbackQuery(query *api.CallbackQuery) {
 
 	switch text {
 	case items:
+		err := b.formItems()
+		if err != nil {
+			b.logger.Warn(err.Error())
+		}
 		pathToFile = allItemsImage
 		text = itemsMessage
 		markup = itemsKeyboard

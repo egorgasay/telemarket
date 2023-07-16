@@ -94,6 +94,7 @@ func (s *Storage) GetAll() []string {
 	for _, item := range s.items {
 		items = append(items, item.GetName())
 	}
+
 	return items
 }
 
