@@ -2,14 +2,14 @@
   {
     "name": "t-shirt black",
     "description": "100% cotton",
-    "price": 1500.00,
+    "price": "1500.00",
     "quantity":  1,
     "path_to_photo": "src/images/item2.png"
   },
   {
     "name": "t-shirt white",
     "description": "100% cotton",
-    "price": 1500.00,
+    "price": "1500.00",
     "quantity":  1,
     "path_to_photo": "src/images/item1.png"
   }

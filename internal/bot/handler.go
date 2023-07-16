@@ -121,13 +121,13 @@ func (b *Bot) handleCallbackQuery(query *api.CallbackQuery) {
 			return
 		}
 
-		if item.Quantity == 0 {
+		if item.GetQuantity() == 0 {
 			markup = soldKeyboard
 		} else {
 			markup = buyKeyboard
 		}
 
-		pathToFile = item.PathToPhoto
+		pathToFile = item.GetImage()
 
 		var bytesArray []byte
 		buf := bytes.NewBuffer(bytesArray)

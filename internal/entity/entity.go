@@ -7,7 +7,7 @@ type Item struct {
 	Description string
 	Image       string
 	Price       string
-	Quantity    string
+	Quantity    int32
 	PathToPhoto string `json:"path_to_photo"`
 }
 
@@ -31,7 +31,7 @@ func (i Item) GetImage() string {
 	return i.Image
 }
 
-func (i Item) GetQuantity() string {
+func (i Item) GetQuantity() int32 {
 	return i.Quantity
 }
 
@@ -46,5 +46,5 @@ type IItem interface {
 	GetDescription() string
 	GetPrice() string
 	GetImage() string
-	GetQuantity() string
+	GetQuantity() int32
 }

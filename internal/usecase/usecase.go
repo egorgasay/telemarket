@@ -24,7 +24,7 @@ func New(storage *storage.Storage) *UseCase {
 }
 
 // GetItemByName returns the item with the given name from the repository.
-func (u *UseCase) GetItemByName(name string) (entity.Item, error) {
+func (u *UseCase) GetItemByName(name string) (entity.IItem, error) {
 	return u.storage.GetItemByName(name)
 }
 

@@ -26,14 +26,14 @@ var defaultItems = []entity.IItem{
 		ID:          "1",
 		Name:        "HATE ⬜",
 		Price:       "1500",
-		Quantity:    "0",
+		Quantity:    0,
 		Description: "100% хлопок.",
 	},
 	entity.Item{
 		ID:          "2",
 		Name:        "HATE ⬛️",
 		Price:       "1500",
-		Quantity:    "0",
+		Quantity:    0,
 		Description: "100% хлопок.",
 	},
 }
@@ -54,7 +54,7 @@ func New(path string) (*Storage, error) {
 		return nil, fmt.Errorf("read json: %w", err)
 	}
 
-	iitems := make([]entity.IItem, len(items))
+	iitems := make([]entity.IItem, 0, len(items))
 	for _, item := range items {
 		iitems = append(iitems, item)
 	}
