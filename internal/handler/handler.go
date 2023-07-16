@@ -29,7 +29,7 @@ func (h *Handler) UpsertItem(ctx context.Context, r *api.UpsertItemRequest) (*ap
 }
 
 func (h *Handler) UpdateButton(ctx context.Context, r *api.UpdateButtonRequest) (*api.UpdateButtonResponse, error) {
-	// TODO: UPDATE BUTTON BY ID
+	// TODO: UPDATE  BUTTON BY ID
 	return &api.UpdateButtonResponse{}, nil
 }
 
