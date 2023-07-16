@@ -12,11 +12,14 @@ type useCase interface {
 
 type Handler struct {
 	logic useCase
-	api.UnimplementedTelemarketServer
+	api.TelemarketServer
 }
 
-func New() *Handler {
-	return &Handler{}
+func New(logic useCase) *Handler {
+
+	return &Handler{
+		logic: logic,
+	}
 }
 
 func (h *Handler) UpsertItem(ctx context.Context, r *api.UpsertItemRequest) (*api.UpsertItemResponse, error) {

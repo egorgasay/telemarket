@@ -3,10 +3,14 @@ package main
 import (
 	"bot/config"
 	"bot/internal/bot"
+	"bot/internal/handler"
 	"bot/internal/storage"
 	"bot/internal/usecase"
+	api "github.com/egorgasay/telemarket-grpc/telemarket"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
@@ -41,6 +45,26 @@ func main() {
 		if err != nil {
 			log.Fatalf("bot error: %s", err)
 		}
+	}()
+
+	h := handler.New(logic)
+
+	grpcServer := grpc.NewServer()
+	log.Println("Starting Telemarket ...")
+	lis, err := net.Listen("tcp", "127.0.0.1:1234")
+	if err != nil {
+		log.Fatal("failed to listen", zap.Error(err))
+	}
+	api.RegisterTelemarketServer(grpcServer, h)
+
+	// gRPC by default
+	go func() {
+		log.Println("Starting GRPC", lis.Addr())
+		err = grpcServer.Serve(lis)
+		if err != nil {
+			log.Fatalf("grpcServer Serve: %v", err)
+		}
+
 	}()
 
 	quit := make(chan os.Signal, 1)
