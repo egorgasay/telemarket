@@ -10,6 +10,7 @@ import (
 type Flag struct {
 	Key         *string
 	PathToItems *string
+	Port        *string
 }
 
 var (
@@ -21,6 +22,7 @@ var (
 
 func init() {
 	f.Key = flag.String("key", "", "-key=KEY")
+	f.Port = flag.String("p", "9876", "-p=port")
 	f.PathToItems = flag.String("items", "items.json", "-config=path/to/items.json")
 }
 
@@ -28,6 +30,7 @@ func init() {
 type Config struct {
 	Key         string
 	PathToItems string
+	Port        string
 }
 
 // New initializing the config for the application.
@@ -45,5 +48,6 @@ func New() (*Config, error) {
 	return &Config{
 		Key:         *f.Key,
 		PathToItems: *f.PathToItems,
+		Port:        *f.Port,
 	}, nil
 }

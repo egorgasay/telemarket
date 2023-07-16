@@ -51,7 +51,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 	log.Println("Starting Telemarket ...")
-	lis, err := net.Listen("tcp", "127.0.0.1:1234")
+	lis, err := net.Listen("tcp", "127.0.0.1:"+cfg.Port) // TODO: TO CONFIG
 	if err != nil {
 		log.Fatal("failed to listen", zap.Error(err))
 	}
