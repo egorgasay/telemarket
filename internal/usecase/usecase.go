@@ -3,6 +3,7 @@ package usecase
 import (
 	"bot/internal/entity"
 	"bot/internal/storage"
+	"context"
 	"errors"
 	"math"
 )
@@ -48,4 +49,8 @@ func (u *UseCase) GetRate() float64 {
 		return 0
 	}
 	return avg
+}
+
+func (u *UseCase) UpsertItem(ctx context.Context, i entity.IItem) error {
+	return u.storage.UpsertItem(ctx, i)
 }
