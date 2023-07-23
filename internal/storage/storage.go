@@ -55,7 +55,8 @@ func New(path string) (*Storage, error) {
 	}
 
 	iitems := make([]entity.IItem, 0, len(items))
-	for _, item := range items {
+	for i, item := range items {
+		item.ID = fmt.Sprintf("%d", i+1)
 		iitems = append(iitems, item)
 	}
 
