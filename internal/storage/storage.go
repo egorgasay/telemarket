@@ -134,3 +134,10 @@ func (s *Storage) UpsertItem(ctx context.Context, item entity.IItem) error {
 
 	return nil
 }
+
+func (s *Storage) GetItems() []entity.IItem {
+	s.RLock()
+	defer s.RUnlock()
+
+	return s.items
+}

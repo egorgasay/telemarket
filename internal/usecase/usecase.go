@@ -54,3 +54,7 @@ func (u *UseCase) GetRate() float64 {
 func (u *UseCase) UpsertItem(ctx context.Context, i entity.IItem) error {
 	return u.storage.UpsertItem(ctx, i)
 }
+
+func (u *UseCase) GetItems() ([]entity.IItem, error) {
+	return u.storage.GetItems(), nil
+}
