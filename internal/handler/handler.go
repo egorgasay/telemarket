@@ -9,6 +9,7 @@ import (
 type useCase interface {
 	UpsertItem(ctx context.Context, i entity.IItem) error
 	GetItems() ([]entity.IItem, error)
+	GetItem(id string) (entity.IItem, error)
 }
 
 type Handler struct {
@@ -56,4 +57,20 @@ func (h *Handler) GetItems(ctx context.Context, r *api.GetItemsRequest) (*api.Ge
 	}
 
 	return &api.GetItemsResponse{Items: itemsWithID}, nil
+}
+
+func (h *Handler) GetItem(ctx context.Context, r *api.GetItemRequest) (*api.GetItemResponse, error) {
+	item, err := h.logic.GetItem(r.GetItemID())
+	if err != nil {
+		return &api.GetItemResponse{}, err
+	}
+
+	return &api.GetItemResponse{Item: &api.Item{
+		Name:        item.GetName(),
+		Id:          item.GetId(),
+		Description: item.GetDescription(),
+		Price:       item.GetPrice(),
+		Image:       item.GetImage(),
+		Quantity:    item.GetQuantity(),
+	}}, nil
 }

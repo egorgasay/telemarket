@@ -58,3 +58,7 @@ func (u *UseCase) UpsertItem(ctx context.Context, i entity.IItem) error {
 func (u *UseCase) GetItems() ([]entity.IItem, error) {
 	return u.storage.GetItems(), nil
 }
+
+func (u *UseCase) GetItem(id string) (entity.IItem, error) {
+	return u.storage.GetItem(id)
+}

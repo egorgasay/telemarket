@@ -142,3 +142,16 @@ func (s *Storage) GetItems() []entity.IItem {
 
 	return s.items
 }
+
+func (s *Storage) GetItem(id string) (entity.IItem, error) {
+	s.RLock()
+	defer s.RUnlock()
+
+	for _, i := range s.items {
+		if i.GetId() == id {
+			return i, nil
+		}
+	}
+
+	return nil, ErrItemNotFound
+}
