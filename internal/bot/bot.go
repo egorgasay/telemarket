@@ -44,13 +44,13 @@ func (b *Bot) formItems() error {
 		return fmt.Errorf("error getting items: %w", err)
 	}
 
+	itemButtons = itemButtons[:0]
 	for _, item := range allItems {
 		itemButtons = append(itemButtons, api.NewInlineKeyboardRow(
 			api.NewInlineKeyboardButtonData(item, "item::"+item),
 		))
 	}
 
-	itemButtons = itemButtons[:0]
 	itemButtons = append(itemButtons,
 		api.NewInlineKeyboardRow(
 			api.NewInlineKeyboardButtonData("Назад", start),
