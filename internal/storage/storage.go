@@ -129,7 +129,7 @@ func (s *Storage) UpsertItem(ctx context.Context, item entity.IItem) error {
 		return nil
 	}
 
-	s.items[fmt.Sprintf("%d", len(s.items)+1)] = item
+	s.items[item.GetId()] = item
 
 	return nil
 }
