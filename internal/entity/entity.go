@@ -35,6 +35,10 @@ func (i Item) GetQuantity() int32 {
 	return i.Quantity
 }
 
+func (i Item) SetID(id string) {
+	i.ID = id
+}
+
 // Information represents the information about the shop.
 type Information struct {
 	Avg float64
@@ -47,4 +51,5 @@ type IItem interface {
 	GetPrice() string
 	GetImage() string
 	GetQuantity() int32
+	SetID(sprintf string)
 }

@@ -124,14 +124,18 @@ func (s *Storage) UpsertItem(ctx context.Context, item entity.IItem) error {
 		return ctx.Err()
 	}
 
+	if item.GetId() == "" {
+		item.SetID(fmt.Sprintf("%d", len(s.items)+1))
+		s.items = append(s.items, item)
+		return nil
+	}
+
 	for indx, i := range s.items {
-		if i.GetName() == item.GetName() {
+		if i.GetId() == item.GetId() {
 			s.items[indx] = item
 			return nil
 		}
 	}
-
-	s.items = append(s.items, item)
 
 	return nil
 }
