@@ -51,5 +51,4 @@ type IItem interface {
 	GetPrice() string
 	GetImage() string
 	GetQuantity() int32
-	SetID(sprintf string)
 }

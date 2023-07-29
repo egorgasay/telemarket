@@ -13,7 +13,7 @@ import (
 // Storage for items.
 type Storage struct {
 	sync.RWMutex
-	items      []entity.IItem
+	items      map[string]entity.IItem
 	allRates   int
 	countRates int
 }
@@ -21,15 +21,15 @@ type Storage struct {
 // ErrItemNotFound error for item not found.
 var ErrItemNotFound = errors.New("item not found")
 
-var defaultItems = []entity.IItem{
-	entity.Item{
+var defaultItems = map[string]entity.IItem{
+	"1": entity.Item{
 		ID:          "1",
 		Name:        "HATE ⬜",
 		Price:       "1500",
 		Quantity:    0,
 		Description: "100% хлопок.",
 	},
-	entity.Item{
+	"2": entity.Item{
 		ID:          "2",
 		Name:        "HATE ⬛️",
 		Price:       "1500",
@@ -54,10 +54,10 @@ func New(path string) (*Storage, error) {
 		return nil, fmt.Errorf("read json: %w", err)
 	}
 
-	iitems := make([]entity.IItem, 0, len(items))
+	iitems := make(map[string]entity.IItem, len(items))
 	for i, item := range items {
 		item.ID = fmt.Sprintf("%d", i+1)
-		iitems = append(iitems, item)
+		iitems[item.ID] = item
 	}
 
 	return &Storage{
@@ -77,10 +77,8 @@ func (s *Storage) GetItemByName(name string) (i entity.IItem, err error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	for _, item := range s.items {
-		if item.GetName() == name {
-			return item, nil
-		}
+	if i, ok := s.items[name]; ok {
+		return i, nil
 	}
 
 	return i, ErrItemNotFound
@@ -125,17 +123,11 @@ func (s *Storage) UpsertItem(ctx context.Context, item entity.IItem) error {
 	}
 
 	if item.GetId() == "" {
-		item.SetID(fmt.Sprintf("%d", len(s.items)+1))
-		s.items = append(s.items, item)
+		s.items[fmt.Sprintf("%d", len(s.items)+1)] = item
 		return nil
 	}
 
-	for indx, i := range s.items {
-		if i.GetId() == item.GetId() {
-			s.items[indx] = item
-			return nil
-		}
-	}
+	s.items[item.GetId()] = item
 
 	return nil
 }
@@ -144,7 +136,12 @@ func (s *Storage) GetItems() []entity.IItem {
 	s.RLock()
 	defer s.RUnlock()
 
-	return s.items
+	var items []entity.IItem
+	for _, item := range s.items {
+		items = append(items, item)
+	}
+
+	return items
 }
 
 func (s *Storage) GetItem(id string) (entity.IItem, error) {
