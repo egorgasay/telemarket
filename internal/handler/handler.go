@@ -10,6 +10,8 @@ type useCase interface {
 	UpsertItem(ctx context.Context, i entity.IItem) error
 	GetItems() ([]entity.IItem, error)
 	GetItem(id string) (entity.IItem, error)
+	Pause()
+	Awake()
 }
 
 type Handler struct {
@@ -73,4 +75,14 @@ func (h *Handler) GetItem(ctx context.Context, r *api.GetItemRequest) (*api.GetI
 		Image:       item.GetImage(),
 		Quantity:    item.GetQuantity(),
 	}}, nil
+}
+
+func (h *Handler) Pause(ctx context.Context, r *api.PauseRequest) (*api.PauseResponse, error) {
+	h.logic.Pause()
+	return &api.PauseResponse{}, nil
+}
+
+func (h *Handler) Awake(ctx context.Context, r *api.AwakeRequest) (*api.AwakeResponse, error) {
+	h.logic.Awake()
+	return &api.AwakeResponse{}, nil
 }

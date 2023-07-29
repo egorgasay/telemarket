@@ -36,6 +36,10 @@ func (b *Bot) handleStart(msg *api.Message) {
 
 // handleMessage handle callbacks from user.
 func (b *Bot) handleCallbackQuery(query *api.CallbackQuery) {
+	if b.logic.IsPaused() {
+		return
+	}
+
 	markup := api.NewInlineKeyboardMarkup()
 	split := strings.Split(query.Data, "::")
 	if len(split) == 0 {

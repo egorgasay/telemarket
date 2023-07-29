@@ -6,12 +6,21 @@ import (
 	"context"
 	"errors"
 	"math"
+	"sync"
 )
 
 // UseCase is a logic layer for the application.
 type UseCase struct {
 	storage *storage.Storage
+	state   int8
+	mu      sync.Mutex
 }
+
+const (
+	_ int8 = iota
+	Awake
+	Paused
+)
 
 // ErrEmpty is returned when the storage is empty.
 var ErrEmpty = errors.New("в магазине еще нет добавленных товаров")
@@ -61,4 +70,20 @@ func (u *UseCase) GetItems() ([]entity.IItem, error) {
 
 func (u *UseCase) GetItem(id string) (entity.IItem, error) {
 	return u.storage.GetItem(id)
+}
+
+func (u *UseCase) IsPaused() bool {
+	return u.state == Paused
+}
+
+func (u *UseCase) Pause() {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	u.state = Paused
+}
+
+func (u *UseCase) Awake() {
+	u.mu.Lock()
+	defer u.mu.Unlock()
+	u.state = Awake
 }

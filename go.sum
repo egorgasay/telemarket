@@ -265,6 +265,10 @@ github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230716110935-56d00ced22
 github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230716110935-56d00ced2266/go.mod h1:WaM/RDN2MoMo+1UOf9CnBHpxu9UuuOErHGVTYrcsxJg=
 github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230723110811-083297085bdc h1:TKXYp/J/snxwrFSVZ/8OwGxo9dX4ut8rpHRZyioIzEk=
 github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230723110811-083297085bdc/go.mod h1:WaM/RDN2MoMo+1UOf9CnBHpxu9UuuOErHGVTYrcsxJg=
+github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230729130150-0d8035c580f1 h1:uUe8ziUP8aZpS5jhpd3oSlFDvPsVxH1DwxgSdJYrCno=
+github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230729130150-0d8035c580f1/go.mod h1:WaM/RDN2MoMo+1UOf9CnBHpxu9UuuOErHGVTYrcsxJg=
+github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230729131432-674d767476da h1:mpjhN6pTjUNsHBatkVehB3JWNw4T8KxOpKOwnDLC3io=
+github.com/egorgasay/telemarket-grpc/telemarket v0.0.0-20230729131432-674d767476da/go.mod h1:WaM/RDN2MoMo+1UOf9CnBHpxu9UuuOErHGVTYrcsxJg=
 github.com/envoyproxy/go-control-plane v0.11.1-0.20230524094728-9239064ad72f h1:7T++XKzy4xg7PKy+bM+Sa9/oe1OC88yz2hXQUISoXfA=
 github.com/envoyproxy/go-control-plane v0.11.1-0.20230524094728-9239064ad72f/go.mod h1:sfYdkwUW4BA3PbKjySwjJy+O4Pu0h62rlqCMHNk+K+Q=
 github.com/envoyproxy/protoc-gen-validate v0.10.1 h1:c0g45+xCJhdgFGw7a5QAfdS4byAbud7miNWJ1WwEVf8=
