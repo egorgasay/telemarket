@@ -77,8 +77,10 @@ func (s *Storage) GetItemByName(name string) (i entity.IItem, err error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	if i, ok := s.items[name]; ok {
-		return i, nil
+	for _, item := range s.items {
+		if item.GetName() == name {
+			return item, nil
+		}
 	}
 
 	return i, ErrItemNotFound
@@ -148,10 +150,8 @@ func (s *Storage) GetItem(id string) (entity.IItem, error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	for _, i := range s.items {
-		if i.GetId() == id {
-			return i, nil
-		}
+	if i, ok := s.items[id]; ok {
+		return i, nil
 	}
 
 	return nil, ErrItemNotFound
